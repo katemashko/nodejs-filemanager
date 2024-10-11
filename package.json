@@ -2,10 +2,10 @@
   "name": "nodejs-filemanager",
   "version": "1.0.0",
   "description": "task filemanager",
-  "main": "index.js",
+  "main": "main.js",
   "type": "module",
   "scripts": {
-    "start": "node ./index.js"
+    "start": "node ./main.js"
   },
   "author": "Katsiaryna Mashko",
   "license": "ISC"
