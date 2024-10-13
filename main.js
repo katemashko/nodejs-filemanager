@@ -1,6 +1,7 @@
 import readline from "node:readline/promises";
 
 import * as navigation from "./commands/navigation/index.js";
+import * as basicFs from "./commands/fs/index.js";
 
 // *********************** general ***********************
 const args = process.argv.slice(2);
@@ -11,7 +12,7 @@ args.forEach((arg) => {
   }
 });
 
-const allowedCommands = ["up", "cd", "ls", ".exit"];
+const allowedCommands = ["up", "cd", "ls", "cat", ".exit"];
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -39,13 +40,18 @@ const main = async () => {
       if (command === "cd") {
         await navigation.cd(argument);
       }
-      if (trimmedInput === "up") {
+      if (command === "up") {
         navigation.up();
       }
-      if (trimmedInput === "ls") {
+      if (command === "ls") {
         await navigation.ls();
       }
-      if (trimmedInput === ".exit") {
+
+      if (command === "cat") {
+        await basicFs.cat(argument);
+      }
+
+      if (command === ".exit") {
         exitProgram();
       }
       navigation.showCurrentWorkingDirectory();
