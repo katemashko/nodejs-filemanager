@@ -1,7 +1,4 @@
 import readline from "node:readline/promises";
-import os from "node:os";
-import path from "node:path";
-import fs from "node:fs";
 
 import * as navigation from "./commands/navigation/index.js";
 
@@ -36,6 +33,9 @@ const main = async () => {
     }
     if (trimmedInput === "up") {
       navigation.up();
+    }
+    if (trimmedInput === "ls") {
+      await navigation.ls();
     }
     if (trimmedInput === ".exit") {
       exitProgram();
