@@ -11,6 +11,8 @@ args.forEach((arg) => {
   }
 });
 
+const allowedCommands = ["up", "cd", "ls", ".exit"];
+
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
@@ -25,22 +27,31 @@ const main = async () => {
   rl.on("SIGINT", () => exitProgram());
 
   while (true) {
-    const input = await rl.question("Print command: \n");
-    const trimmedInput = input.trim();
-    const [command, argument] = trimmedInput.split(" ");
-    if (command === "cd") {
-      navigation.cd(argument);
+    try {
+      const input = await rl.question("Print command: \n");
+      const trimmedInput = input.trim();
+      const [command, argument] = trimmedInput.split(" ");
+
+      if (!allowedCommands.includes(command)) {
+        throw new Error(`Unknown operation: ${command}`);
+      }
+
+      if (command === "cd") {
+        await navigation.cd(argument);
+      }
+      if (trimmedInput === "up") {
+        navigation.up();
+      }
+      if (trimmedInput === "ls") {
+        await navigation.ls();
+      }
+      if (trimmedInput === ".exit") {
+        exitProgram();
+      }
+      navigation.showCurrentWorkingDirectory();
+    } catch (error) {
+      console.log(`Operation failed: ${error.message}`);
     }
-    if (trimmedInput === "up") {
-      navigation.up();
-    }
-    if (trimmedInput === "ls") {
-      await navigation.ls();
-    }
-    if (trimmedInput === ".exit") {
-      exitProgram();
-    }
-    navigation.showCurrentWorkingDirectory();
   }
 };
 

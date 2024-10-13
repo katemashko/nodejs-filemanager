@@ -1,6 +1,7 @@
 import path from "node:path";
 import os from "node:os";
 import fs from "node:fs/promises";
+import { error } from "node:console";
 
 const homeDirectory = os.homedir();
 let currentWorkingDirectory = homeDirectory;
@@ -13,8 +14,16 @@ function up() {
   }
 }
 
-function cd(cdPath) {
-  currentWorkingDirectory = path.resolve(currentWorkingDirectory, cdPath);
+async function cd(cdPath) {
+  if (!cdPath) {
+    throw new Error("Invalid input");
+  }
+  const directoryToSwitch = path.resolve(currentWorkingDirectory, cdPath);
+  if (await itemExists(directoryToSwitch)) {
+    currentWorkingDirectory = path.resolve(currentWorkingDirectory, cdPath);
+  } else {
+    throw new Error("Directory does not exist");
+  }
 }
 
 async function ls() {
@@ -47,13 +56,13 @@ function showCurrentWorkingDirectory() {
   console.log(`You are currently in ${currentWorkingDirectory}`);
 }
 
-// const pathExists = async (directoryPath) => {
-//   try {
-//     await fs.access(directoryPath, fs.constants.F_OK);
-//     return true;
-//   } catch (error) {
-//     return false;
-//   }
-// };
+async function itemExists(itemPath) {
+  try {
+    await fs.access(itemPath, fs.constants.F_OK);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
 
-export { up, showCurrentWorkingDirectory, cd, ls };
+export { up, cd, ls, showCurrentWorkingDirectory, itemExists };
