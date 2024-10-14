@@ -110,4 +110,40 @@ async function cp(sourceFilePath, newFilePath) {
   });
 }
 
-export { cat, add, rn, cp };
+// *********************** move file ***********************
+async function mv(sourceFilePath, newFilePath) {
+  if (!sourceFilePath || !newFilePath) {
+    throw new Error("Invalid input");
+  }
+
+  const sourceFullFilePath = path.resolve(
+    navigation.getCurrentWorkingDirectory(),
+    sourceFilePath
+  );
+
+  const newFullFilePath = path.resolve(
+    navigation.getCurrentWorkingDirectory(),
+    newFilePath
+  );
+
+  if (!(await navigation.fileExists(sourceFullFilePath))) {
+    throw new Error("File does not exist");
+  }
+  if (await navigation.fileExists(newFullFilePath)) {
+    throw new Error("File already exists");
+  }
+
+  return new Promise((res, rej) => {
+    const readFileStream = fs.createReadStream(sourceFullFilePath);
+    const writeFileStream = fs.createWriteStream(newFullFilePath);
+
+    readFileStream.on("error", rej);
+    writeFileStream.on("error", rej);
+    writeFileStream.on("finish", res);
+
+    readFileStream.pipe(writeFileStream);
+    fsPromise.unlink(sourceFullFilePath);
+  });
+}
+
+export { cat, add, rn, cp, mv };
