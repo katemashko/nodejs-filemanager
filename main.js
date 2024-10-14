@@ -3,6 +3,7 @@ import readline from "node:readline/promises";
 import * as navigation from "./commands/navigation/index.js";
 import * as basicFs from "./commands/fs/index.js";
 import * as hashFile from "./commands/hash/index.js";
+import * as archive from "./commands/archive/index.js";
 
 // *********************** general ***********************
 const args = process.argv.slice(2);
@@ -24,6 +25,7 @@ const allowedCommands = [
   "mv",
   "rm",
   "hash",
+  "compress",
   ".exit",
 ];
 
@@ -87,6 +89,10 @@ const main = async () => {
 
       if (command === "hash") {
         await hashFile.hash(argumentOne);
+      }
+
+      if (command === "compress") {
+        await archive.compress(argumentOne, argumentTwo);
       }
 
       if (command === ".exit") {
