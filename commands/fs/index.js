@@ -5,6 +5,7 @@ import fs from "node:fs";
 
 import * as navigation from "../navigation/index.js";
 
+// *********************** read file ***********************
 async function cat(filePath) {
   if (!filePath) {
     throw new Error("Invalid input");
@@ -29,4 +30,25 @@ async function cat(filePath) {
   });
 }
 
-export { cat };
+// *********************** create new file ***********************
+async function add(newFileName) {
+  if (!newFileName) {
+    throw new Error("Invalid input");
+  }
+
+  const fullFilePath = path.join(
+    navigation.getCurrentWorkingDirectory(),
+    newFileName
+  );
+  if (await navigation.fileExists(fullFilePath)) {
+    throw new Error("File already exists");
+  }
+
+  const newFile = await fsPromise.open(fullFilePath, "w");
+  console.log(`File ${fullFilePath} was created successfully`);
+  await newFile.close();
+}
+
+// *********************** rename file ***********************
+
+export { cat, add };

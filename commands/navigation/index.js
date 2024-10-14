@@ -68,6 +68,15 @@ async function itemExists(itemPath) {
   }
 }
 
+async function fileExists(fileName) {
+  try {
+    await fs.access(fileName, fs.constants.F_OK);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
 export {
   up,
   cd,
@@ -75,4 +84,5 @@ export {
   showCurrentWorkingDirectory,
   getCurrentWorkingDirectory,
   itemExists,
+  fileExists,
 };
