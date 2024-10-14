@@ -2,6 +2,7 @@ import readline from "node:readline/promises";
 
 import * as navigation from "./commands/navigation/index.js";
 import * as basicFs from "./commands/fs/index.js";
+import * as hashFile from "./commands/hash/index.js";
 
 // *********************** general ***********************
 const args = process.argv.slice(2);
@@ -22,6 +23,7 @@ const allowedCommands = [
   "cp",
   "mv",
   "rm",
+  "hash",
   ".exit",
 ];
 
@@ -38,6 +40,7 @@ const main = async () => {
   // *********************** finalization ***********************
   rl.on("SIGINT", () => exitProgram());
 
+  // *********************** commands ***********************
   while (true) {
     try {
       const input = await rl.question("Print command: \n");
@@ -82,6 +85,10 @@ const main = async () => {
         await basicFs.rm(argumentOne);
       }
 
+      if (command === "hash") {
+        await hashFile.hash(argumentOne);
+      }
+
       if (command === ".exit") {
         exitProgram();
       }
@@ -92,6 +99,7 @@ const main = async () => {
   }
 };
 
+// ***********************************************************
 function exitProgram() {
   console.log(`Thank you for using File Manager, ${username}, goodbye!`);
   navigation.showCurrentWorkingDirectory();
