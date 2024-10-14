@@ -4,6 +4,7 @@ import * as navigation from "./commands/navigation/index.js";
 import * as basicFs from "./commands/fs/index.js";
 import * as hashFile from "./commands/hash/index.js";
 import * as archive from "./commands/archive/index.js";
+import * as osCommands from "./commands/os/index.js";
 
 // *********************** general ***********************
 const args = process.argv.slice(2);
@@ -27,6 +28,7 @@ const allowedCommands = [
   "hash",
   "compress",
   "decompress",
+  "os",
   ".exit",
 ];
 
@@ -98,6 +100,26 @@ const main = async () => {
 
       if (command === "decompress") {
         await archive.decompress(argumentOne, argumentTwo);
+      }
+
+      if (command === "os" && argumentOne === "--EOL") {
+        osCommands.getEOL();
+      }
+
+      if (command === "os" && argumentOne === "--cpus") {
+        osCommands.getCpu();
+      }
+
+      if (command === "os" && argumentOne === "--homedir") {
+        osCommands.getHomeDirectory();
+      }
+
+      if (command === "os" && argumentOne === "--username") {
+        osCommands.getSystemUsername();
+      }
+
+      if (command === "os" && argumentOne === "--architecture") {
+        osCommands.getCpuArchitecture();
       }
 
       if (command === ".exit") {
