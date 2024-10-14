@@ -1,5 +1,38 @@
 import os from "node:os";
 
+const allowedArguments = [
+  "--EOL",
+  "--cpus",
+  "--homedir",
+  "--username",
+  "--architecture",
+];
+
+function executeOsCommand(argument) {
+  if (!allowedArguments.includes(argument)) {
+    throw new Error("Unexpected os argument");
+  }
+  if (argument === "--EOL") {
+    getEOL();
+  }
+
+  if (argument === "--cpus") {
+    getCpu();
+  }
+
+  if (argument === "--homedir") {
+    getHomeDirectory();
+  }
+
+  if (argument === "--username") {
+    getSystemUsername();
+  }
+
+  if (argument === "--architecture") {
+    getCpuArchitecture();
+  }
+}
+
 // *********************** EOL ***********************
 function getEOL() {
   const osEOL = os.EOL;
@@ -44,4 +77,5 @@ export {
   getHomeDirectory,
   getSystemUsername,
   getCpuArchitecture,
+  executeOsCommand,
 };

@@ -102,24 +102,8 @@ const main = async () => {
         await archive.decompress(argumentOne, argumentTwo);
       }
 
-      if (command === "os" && argumentOne === "--EOL") {
-        osCommands.getEOL();
-      }
-
-      if (command === "os" && argumentOne === "--cpus") {
-        osCommands.getCpu();
-      }
-
-      if (command === "os" && argumentOne === "--homedir") {
-        osCommands.getHomeDirectory();
-      }
-
-      if (command === "os" && argumentOne === "--username") {
-        osCommands.getSystemUsername();
-      }
-
-      if (command === "os" && argumentOne === "--architecture") {
-        osCommands.getCpuArchitecture();
+      if (command === "os") {
+        osCommands.executeOsCommand(argumentOne);
       }
 
       if (command === ".exit") {
