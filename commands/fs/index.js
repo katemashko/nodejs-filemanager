@@ -60,14 +60,54 @@ async function rn(filePath, newFileName) {
     filePath
   );
 
-  const newFullFilePath = path.resolve(oldFullFilePath, "..", newFileName);
+  // C:\Users\katem\hello.txt
+  // privet.txt
+  const newFullFilePath = path.resolve(
+    path.dirname(oldFullFilePath),
+    newFileName
+  );
 
   if (!(await navigation.fileExists(oldFullFilePath))) {
     throw new Error("File does not exist");
   }
 
-  const renamedFile = await fsPromise.rename(oldFullFilePath, newFullFilePath);
+  await fsPromise.rename(oldFullFilePath, newFullFilePath);
   console.log(`File ${oldFullFilePath} was renamed successfully`);
 }
 
-export { cat, add, rn };
+// *********************** copy file ***********************
+async function cp(sourceFilePath, newFilePath) {
+  if (!sourceFilePath || !newFilePath) {
+    throw new Error("Invalid input");
+  }
+
+  const sourceFullFilePath = path.resolve(
+    navigation.getCurrentWorkingDirectory(),
+    sourceFilePath
+  );
+
+  const newFullFilePath = path.resolve(
+    navigation.getCurrentWorkingDirectory(),
+    newFilePath
+  );
+
+  if (!(await navigation.fileExists(sourceFullFilePath))) {
+    throw new Error("File does not exist");
+  }
+  if (await navigation.fileExists(newFullFilePath)) {
+    throw new Error("File already exists");
+  }
+
+  return new Promise((res, rej) => {
+    const readFileStream = fs.createReadStream(sourceFullFilePath);
+    const writeFileStream = fs.createWriteStream(newFullFilePath);
+
+    readFileStream.on("error", rej);
+    writeFileStream.on("error", rej);
+    writeFileStream.on("finish", res);
+
+    readFileStream.pipe(writeFileStream);
+  });
+}
+
+export { cat, add, rn, cp };
