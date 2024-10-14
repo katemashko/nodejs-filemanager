@@ -36,7 +36,7 @@ async function add(newFileName) {
     throw new Error("Invalid input");
   }
 
-  const fullFilePath = path.join(
+  const fullFilePath = path.resolve(
     navigation.getCurrentWorkingDirectory(),
     newFileName
   );
@@ -50,5 +50,24 @@ async function add(newFileName) {
 }
 
 // *********************** rename file ***********************
+async function rn(filePath, newFileName) {
+  if (!newFileName || !filePath) {
+    throw new Error("Invalid input");
+  }
 
-export { cat, add };
+  const oldFullFilePath = path.resolve(
+    navigation.getCurrentWorkingDirectory(),
+    filePath
+  );
+
+  const newFullFilePath = path.resolve(oldFullFilePath, "..", newFileName);
+
+  if (!(await navigation.fileExists(oldFullFilePath))) {
+    throw new Error("File does not exist");
+  }
+
+  const renamedFile = await fsPromise.rename(oldFullFilePath, newFullFilePath);
+  console.log(`File ${oldFullFilePath} was renamed successfully`);
+}
+
+export { cat, add, rn };

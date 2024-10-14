@@ -12,7 +12,7 @@ args.forEach((arg) => {
   }
 });
 
-const allowedCommands = ["up", "cd", "ls", "cat", "add", ".exit"];
+const allowedCommands = ["up", "cd", "ls", "cat", "add", "rn", ".exit"];
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -31,14 +31,14 @@ const main = async () => {
     try {
       const input = await rl.question("Print command: \n");
       const trimmedInput = input.trim();
-      const [command, argument] = trimmedInput.split(" ");
+      const [command, argumentOne, argumentTwo] = trimmedInput.split(" ");
 
       if (!allowedCommands.includes(command)) {
         throw new Error(`Unknown operation: ${command}`);
       }
 
       if (command === "cd") {
-        await navigation.cd(argument);
+        await navigation.cd(argumentOne);
       }
       if (command === "up") {
         navigation.up();
@@ -48,11 +48,15 @@ const main = async () => {
       }
 
       if (command === "cat") {
-        await basicFs.cat(argument);
+        await basicFs.cat(argumentOne);
       }
 
       if (command === "add") {
-        await basicFs.add(argument);
+        await basicFs.add(argumentOne);
+      }
+
+      if (command === "rn") {
+        await basicFs.rn(argumentOne, argumentTwo);
       }
 
       if (command === ".exit") {
