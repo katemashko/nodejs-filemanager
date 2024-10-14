@@ -3,7 +3,6 @@ import crypto from "crypto";
 import path from "node:path";
 
 import * as navigation from "../navigation/index.js";
-import { error } from "node:console";
 
 async function hash(filePath) {
   const fullFilePath = path.resolve(

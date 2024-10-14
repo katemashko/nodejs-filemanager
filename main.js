@@ -92,9 +92,11 @@ const main = async () => {
       if (command === ".exit") {
         exitProgram();
       }
-      navigation.showCurrentWorkingDirectory();
     } catch (error) {
       console.log(`Operation failed: ${error.message}`);
+    } finally {
+      navigation.showCurrentWorkingDirectory();
+      console.log("\n");
     }
   }
 };

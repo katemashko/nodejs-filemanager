@@ -139,10 +139,13 @@ async function mv(sourceFilePath, newFilePath) {
 
     readFileStream.on("error", rej);
     writeFileStream.on("error", rej);
-    writeFileStream.on("finish", res);
+    writeFileStream.on("finish", () => {
+      console.log(`File ${sourceFullFilePath} was moved to ${newFullFilePath}`);
+      fsPromise.unlink(sourceFullFilePath);
+      res();
+    });
 
     readFileStream.pipe(writeFileStream);
-    fsPromise.unlink(sourceFullFilePath);
   });
 }
 
@@ -161,7 +164,8 @@ async function rm(filePath) {
     throw new Error("File does not exist");
   }
 
-  fsPromise.unlink(fullFilePath);
+  await fsPromise.unlink(fullFilePath);
+  console.log(`File ${fullFilePath} was removed`);
 }
 
 export { cat, add, rn, cp, mv, rm };
