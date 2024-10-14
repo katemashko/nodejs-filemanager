@@ -26,6 +26,7 @@ const allowedCommands = [
   "rm",
   "hash",
   "compress",
+  "decompress",
   ".exit",
 ];
 
@@ -93,6 +94,10 @@ const main = async () => {
 
       if (command === "compress") {
         await archive.compress(argumentOne, argumentTwo);
+      }
+
+      if (command === "decompress") {
+        await archive.decompress(argumentOne, argumentTwo);
       }
 
       if (command === ".exit") {
