@@ -5,10 +5,19 @@ import path from "node:path";
 import * as navigation from "../navigation/index.js";
 
 async function hash(filePath) {
+  if (!filePath) {
+    throw new Error("Invalid input");
+  }
+
   const fullFilePath = path.resolve(
     navigation.getCurrentWorkingDirectory(),
     filePath
   );
+
+  if (!(await navigation.fileExists(fullFilePath))) {
+    throw new Error("File does not exist");
+  }
+
   const hash = crypto.createHash("SHA256");
   const readFileStream = fs.createReadStream(fullFilePath);
 
@@ -17,7 +26,7 @@ async function hash(filePath) {
   });
 
   return new Promise((res, rej) => {
-    readFileStream.on("finish", () => {
+    readFileStream.on("end", () => {
       const hexHash = hash.digest("hex");
       console.log(`Hash: ${hexHash}`);
       res();
